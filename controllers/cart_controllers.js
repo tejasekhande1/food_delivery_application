@@ -66,4 +66,25 @@ module.exports.controller = (app) => {
       }
     });
   });
+
+  app.delete('/api/cart/:cart_id', (req, res) => {
+    const cart_id = req.params.cart_id;
+    
+    const sql = `
+      DELETE FROM cart_detail
+      WHERE cart_id = ?`;
+    
+    db.query(sql, [cart_id], (err, result) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        res.status(500).json({ error: "Failed to delete cart item" });
+      } else {
+        if (result.affectedRows > 0) {
+          res.status(200).json({ message: "Cart item deleted successfully" });
+        } else {
+          res.status(404).json({ error: "Cart item not found" });
+        }
+      }
+    });
+  });
 };
