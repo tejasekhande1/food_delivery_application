@@ -30,33 +30,22 @@ module.exports.controller = (app) => {
         res.status(500).json({ error: "Failed to add item to cart" });
       } else {
         console.log("New item added to cart successfully");
-        res
-          .status(200)
-          .json({
-            message: "Item added to cart successfully",
-            cart_id: result.insertId,
-          });
+        res.status(200).json({
+          message: "Item added to cart successfully",
+          cart_id: result.insertId,
+        });
       }
     });
   });
 
-  app.get('/api/cart', (req, res) => {
+  app.get("/api/cart", (req, res) => {
     const user_id = req.query.user_id;
-    
+
     const sql = `
-      SELECT c.cart_id, 
-             c.restaurant_id, r.name as restaurent_name,
-             c.menu_item_id, m.name as menu_item_name,
-             c.portion_id, p.name as portion_name,
-             c.ingredient_id, i.name as ingredient_name,
-             c.qty
-      FROM cart_detail c
-      LEFT JOIN restaurant_detail r ON c.restaurant_id = r.restaurant_id
-      LEFT JOIN menu_item_detail m ON c.menu_item_id = m.menu_item_id
-      LEFT JOIN portion_detail p ON c.portion_id = p.portion_id
-      LEFT JOIN ingredient_detail i ON c.ingredient_id = i.ingredient_id
+      SELECT *
+      FROM cart_detail
       WHERE c.user_id = ?
-        AND c.status = 1`;     
+        AND c.status = 1`;
     db.query(sql, [user_id], (err, results) => {
       if (err) {
         console.error("Error executing SQL query:", err);
@@ -67,13 +56,13 @@ module.exports.controller = (app) => {
     });
   });
 
-  app.delete('/api/cart/:cart_id', (req, res) => {
+  app.delete("/api/cart/:cart_id", (req, res) => {
     const cart_id = req.params.cart_id;
-    
+
     const sql = `
       DELETE FROM cart_detail
       WHERE cart_id = ?`;
-    
+
     db.query(sql, [cart_id], (err, result) => {
       if (err) {
         console.error("Error executing SQL query:", err);

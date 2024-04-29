@@ -2,6 +2,7 @@ var db = require('./../helpers/db_helpers')
 var helper = require('./../helpers/helpers')
 var multiparty = require("multiparty")
 var fs = require("fs")
+const { log } = require('console')
 var imageSavePath = "./public/img/"
 
 const msg_success = "successfully";
@@ -16,6 +17,7 @@ module.exports.controller = (app, io, socket_list) => {
     const msg_update_password = "user password updated successfully";
 
     app.post('/api/login', (req, res) => {
+        console.log("In Login");
         helper.Dlog(req.body);
         var reqObj = req.body;
 
