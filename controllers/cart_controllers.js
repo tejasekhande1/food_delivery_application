@@ -44,8 +44,8 @@ module.exports.controller = (app) => {
     const sql = `
       SELECT *
       FROM cart_detail
-      WHERE c.user_id = ?
-        AND c.status = 1`;
+      WHERE user_id = ?
+        AND status = 1`;
     db.query(sql, [user_id], (err, results) => {
       if (err) {
         console.error("Error executing SQL query:", err);
